@@ -29,9 +29,9 @@ namespace RacingSimulation.CurveEditor
             base.OnInspectorGUI();
 
             EditorGUI.BeginChangeCheck();
-            if (GUILayout.Button("Create new"))
+            if (GUILayout.Button("Reset"))
             {
-                Undo.RecordObject(this.creator, "Create new");
+                Undo.RecordObject(this.creator, "Reset");
                 this.creator.CreatePath();
             }
 
@@ -78,8 +78,8 @@ namespace RacingSimulation.CurveEditor
                 }
                 else if (!this.Path.IsClosed)
                 {
-                    this.Path.AddSegment(mousePos);
                     Undo.RecordObject(creator, "Add segment");
+                    this.Path.AddSegment(mousePos);
                 }
             }
         }
