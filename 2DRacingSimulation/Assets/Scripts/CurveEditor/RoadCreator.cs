@@ -14,14 +14,29 @@ namespace RacingSimulation.CurveEditor
         [SerializeField] private float tiling = 1f;       
         [SerializeField] private bool autoUpdate;
 
+        private Mesh CurrentMesh => this.GetComponent<MeshFilter>().sharedMesh;
+
+        [ExecuteInEditMode]
+        public Mesh CloneMesh()
+        {
+            Mesh clonedMesh = new Mesh();
+
+            clonedMesh.name = "clone";
+            clonedMesh.vertices = this.CurrentMesh.vertices;
+            clonedMesh.triangles = this.CurrentMesh.triangles;
+            clonedMesh.normals = this.CurrentMesh.normals;
+            clonedMesh.uv = this.CurrentMesh.uv;
+
+            return clonedMesh;
+        }
+
         public void UpdateRoad()
         {
             Path path = this.GetComponent<PathCreator>().Path;
             Vector2[] points = path.CalculateEvenlySpacedPoints(this.spacing);
             this.GetComponent<MeshFilter>().mesh = this.CreateRoadMesh(points, path.IsClosed);
 
-            int textureRepeat = Mathf.RoundToInt(this.tiling * points.Length * this.spacing * .05f);
-            this.GetComponent<MeshRenderer>().sharedMaterial.mainTextureScale = new Vector2(1, textureRepeat);
+            this.UpdateMaterial(points);
         }
 
         private Mesh CreateRoadMesh(Vector2[] points, bool isClosed)
@@ -77,6 +92,12 @@ namespace RacingSimulation.CurveEditor
             mesh.triangles = tris;
             mesh.uv = uvs;
             return mesh;
+        }
+
+        private void UpdateMaterial(Vector2[] points)
+        {
+            int textureRepeat = Mathf.RoundToInt(this.tiling * points.Length * this.spacing * .05f);
+            this.GetComponent<MeshRenderer>().sharedMaterial.mainTextureScale = new Vector2(1, textureRepeat);
         }
     }
 }
