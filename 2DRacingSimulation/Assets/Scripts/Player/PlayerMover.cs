@@ -18,6 +18,12 @@ namespace RacingSimulation.Player
         private Rigidbody2D rgb;
         private Transform transform;
 
+        public void SetupVelocity()
+        {
+            this.rgb.velocity = Vector2.zero;
+            this.rgb.angularVelocity = 0f;
+        }
+
         public void Rotate(float horizontal)
         {
             float calculateTorqueForce = Mathf.Lerp(0, this.torqueForce, this.rgb.velocity.magnitude / 10);

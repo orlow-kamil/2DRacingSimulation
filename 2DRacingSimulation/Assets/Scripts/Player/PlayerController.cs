@@ -10,11 +10,15 @@ namespace RacingSimulation.Player
 
         private Rigidbody2D rgbd;
 
+        public void RestartPlayer() => this.playerMover.SetupVelocity();
+
         private void Awake()
         {
             this.rgbd = this.GetComponent<Rigidbody2D>();
             this.playerMover.Rgbd = this.rgbd;
         }
+
+        private void Start() => this.RestartPlayer();
 
         private void FixedUpdate()
         {
