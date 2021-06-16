@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System.Collections.Generic;
 
 namespace RacingSimulation.CurveEditor
 {
@@ -10,9 +9,6 @@ namespace RacingSimulation.CurveEditor
         public Path Path => this.creator.Path;
         
         private PathCreator creator;
-
-        private const float segmentSelectDistanceTreshold = .1f;
-        private int selectedSegmentIndex = -1;
 
 
         private void OnEnable()
@@ -60,7 +56,6 @@ namespace RacingSimulation.CurveEditor
             Event guiEvent = Event.current;
             Vector2 mousePos = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition).origin;
 
-            this.InputSplitSegment(guiEvent, mousePos);
             this.InputAddSegment(guiEvent, mousePos);
             this.InputRemoveSegment(guiEvent, mousePos);
 
@@ -71,39 +66,10 @@ namespace RacingSimulation.CurveEditor
         {
             if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0 && guiEvent.shift)
             {
-                if (selectedSegmentIndex != -1)
-                {
-                    Undo.RecordObject(creator, "Split segment");
-                    this.Path.SplitSegment(mousePos, selectedSegmentIndex);
-                }
-                else if (!this.Path.IsClosed)
+                if (!this.Path.IsClosed)
                 {
                     Undo.RecordObject(creator, "Add segment");
                     this.Path.AddSegment(mousePos);
-                }
-            }
-        }
-
-        private void InputSplitSegment(Event guiEvent, Vector2 mousePos)
-        {
-            if (guiEvent.type == EventType.MouseMove)
-            {
-                float minDisctanceToSegment = segmentSelectDistanceTreshold;
-                int newSelectedSegmentIndex = -1;
-                for (int i = 0; i < this.Path.NumSegment; i += 3)
-                {
-                    List<Vector2> points = this.Path.GetPointsInSegment(i);
-                    float distance = HandleUtility.DistancePointBezier(mousePos, points[0], points[3], points[1], points[2]);
-                    if (distance < minDisctanceToSegment)
-                    {
-                        minDisctanceToSegment = distance;
-                        newSelectedSegmentIndex = i;
-                    }
-                }
-                if (newSelectedSegmentIndex != selectedSegmentIndex)
-                {
-                    selectedSegmentIndex = newSelectedSegmentIndex;
-                    HandleUtility.Repaint();
                 }
             }
         }
@@ -142,7 +108,7 @@ namespace RacingSimulation.CurveEditor
                     Handles.DrawLine(points[0], points[1]);
                     Handles.DrawLine(points[2], points[3]);
                 }
-                Color segmentColor = (i == selectedSegmentIndex && Event.current.shift) ? this.creator.SelectedSegmentColor : this.creator.SegmentColor;
+                Color segmentColor = this.creator.SegmentColor;
                 Handles.DrawBezier(points[0], points[3], points[1], points[2], segmentColor, null, 2f);
             }
 
