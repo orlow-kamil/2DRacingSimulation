@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace RacingSimulation.Obstacle
 {
+    [RequireComponent(typeof(Collider2D))]
     public class WaterObstacle : MonoBehaviour, IObstacle
     {
         public float Force => this.force;
@@ -14,7 +15,7 @@ namespace RacingSimulation.Obstacle
         {
             if (this.active && collision.gameObject.TryGetComponent(out PlayerController player))
             {
-                if (player.InvicibleMode) return;
+                if (player.InvincibleMode) return;
                 Vector2 force = this.force * this.transform.up;
                 player.Rgbd.AddForce(force);
             }
