@@ -8,7 +8,7 @@ namespace RacingSimulation.Player
         public bool OnAccelerate => Input.GetKey(this.accelerateKeyCode);
         public bool OnBrake => Input.GetKey(this.brakeKeyCode);
         
-        [SerializeField] private KeyCode accelerateKeyCode = KeyCode.Space;
+        [SerializeField] private KeyCode accelerateKeyCode = KeyCode.LeftShift;
         [SerializeField] private KeyCode brakeKeyCode = KeyCode.LeftControl;
 
         public float GetHorizontalAxis() => Input.GetAxis("Horizontal");

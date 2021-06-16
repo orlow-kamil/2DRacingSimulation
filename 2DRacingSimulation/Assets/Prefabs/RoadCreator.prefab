@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3445008764637707906}
   - component: {fileID: 3445008764637707907}
   m_Layer: 0
-  m_Name: Road
+  m_Name: RoadCreator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31c22e785190fe04ba8983683069c6ff, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -99,15 +99,32 @@ MonoBehaviour:
   ControlColor: {r: 1, g: 1, b: 1, a: 1}
   SegmentColor: {r: 0, g: 1, b: 0, a: 1}
   SelectedSegmentColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  AnchorDiameter: 0.1
+  AnchorDiameter: 0.31
   ControlDiameter: 0.075
   DisplayControlPoints: 1
   path:
     points:
-    - {x: 2.291, y: 0.342}
-    - {x: 2.791, y: 0.842}
-    - {x: 3.791, y: -0.15799999}
-    - {x: 4.291, y: 0.342}
+    - {x: -1, y: 0}
+    - {x: -0.5, y: 0.5}
+    - {x: 0.5, y: -0.5}
+    - {x: 1, y: 0}
+    - {x: 1.5, y: 0.5}
+    - {x: 4.552826, y: 1.2932721}
+    - {x: 7.6056523, y: 2.0865443}
+    - {x: 10.658479, y: 2.8798165}
+    - {x: 9.46793, y: -1.7280302}
+    - {x: 8.27738, y: -6.335877}
+    - {x: 7.08683, y: -10.943724}
+    - {x: 2.9025102, y: -10.1124325}
+    - {x: -1.2818098, y: -9.281141}
+    - {x: -5.46613, y: -8.44985}
+    - {x: -10.452937, y: -8.1162615}
+    - {x: -15.439745, y: -7.7826734}
+    - {x: -20.426552, y: -7.449085}
+    - {x: -20.05167, y: -3.4305043}
+    - {x: -19.67679, y: 0.58807635}
+    - {x: -19.30191, y: 4.606657}
+    - {x: -15.794853, y: 5.025918}
     isClosed: 0
 --- !u!114 &3445008764637707907
 MonoBehaviour:
