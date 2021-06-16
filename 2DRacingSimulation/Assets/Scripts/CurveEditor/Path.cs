@@ -56,13 +56,6 @@ namespace RacingSimulation.CurveEditor
             this.points.Add(anchorPos);
         }
 
-        public void SplitSegment(Vector2 anchorPos, int segmentIndex)
-        {
-            this.points.InsertRange(segmentIndex * 3 + 2, new Vector2[] { Vector2.zero, anchorPos, Vector2.zero });
-
-            this.AutoSetAnchorControlPoints(segmentIndex * 3 + 3);
-        }
-
         public void DeleteSegment(int anchorIndex)
         {
             if (this.numSegments > 2 || !this.isClosed && this.numSegments > 1)
@@ -173,38 +166,6 @@ namespace RacingSimulation.CurveEditor
                 this.points[currentCorrespondingIndex] = this.points[currentAnchorIndex] + direction * distance;
             }
         }
-
-        private void AutoSetAnchorControlPoints(int anchorIndex)
-        {
-            Vector2 anchorPos = this.points[anchorIndex];
-            Vector2 direction = Vector2.zero;
-            float[] neighbourDistances = new float[2];
-
-            if (anchorIndex - 3 >= 0 || this.isClosed)
-            {
-                Vector2 offset = this.points[this.LoopIndex(anchorIndex - 3)] - anchorPos;
-                direction += offset.normalized;
-                neighbourDistances[0] = offset.magnitude;
-            }
-            if (anchorIndex + 3 >= 0 || isClosed)
-            {
-                Vector2 offset = this.points[this.LoopIndex(anchorIndex + 3)] - anchorPos;
-                direction -= offset.normalized;
-                neighbourDistances[1] = -offset.magnitude;
-            }
-
-            direction.Normalize();
-
-            for (int i = 0; i < 2; i++)
-            {
-                int controlIndex = anchorIndex + i * 2 - 1;
-                if (controlIndex >= 0 && controlIndex < this.numPoints || isClosed)
-                {
-                    this.points[this.LoopIndex(controlIndex)] = anchorPos + direction * neighbourDistances[i] * .5f;
-                }
-            }
-        }
-
 
         private int LoopIndex(int index) => (index + this.numPoints) % this.numPoints;
     }

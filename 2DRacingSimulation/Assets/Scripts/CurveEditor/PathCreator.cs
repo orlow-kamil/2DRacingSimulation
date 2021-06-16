@@ -9,7 +9,6 @@ namespace RacingSimulation.CurveEditor
         public Color AnchorColor = Color.red;
         public Color ControlColor = Color.white;
         public Color SegmentColor = Color.green;
-        public Color SelectedSegmentColor = Color.yellow;
 
         public float AnchorDiameter = .1f;
         public float ControlDiameter = .075f;

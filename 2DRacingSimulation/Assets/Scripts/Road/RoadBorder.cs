@@ -1,5 +1,4 @@
 ﻿using RacingSimulation.Player;
-using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using RacingSimulation.Manager;
