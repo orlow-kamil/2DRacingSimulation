@@ -7,7 +7,7 @@ namespace RacingSimulation.Player
     [RequireComponent(typeof(Collider2D))]
     public class PlayerController : MonoBehaviour
     {
-        public bool InvicibleMode { get => this.invicibleMode; set => this.invicibleMode = value; }
+        public bool InvincibleMode { get => this.invincibleMode; set => this.invincibleMode = value; }
         public int CurrentCheckPointIndex { get => this.currentCheckPointIndex; set => this.currentCheckPointIndex = value; }
         public Rigidbody2D Rgbd => this.rgbd;
 
@@ -15,8 +15,8 @@ namespace RacingSimulation.Player
         [SerializeField] private PlayerMover playerMover;
 
         [Header("InvicibleMode")]
-        [SerializeField] [Range(0.5f, 5f)] private float invicibleTime = 1.5f;
-        [SerializeField] private bool invicibleMode = true;
+        [SerializeField] [Range(0.5f, 5f)] private float invincibleTime = 1.5f;
+        [SerializeField] private bool invincibleMode = true;
 
 
         private int currentCheckPointIndex;
@@ -25,7 +25,6 @@ namespace RacingSimulation.Player
         public void RestartPlayer()
         {
             this.playerMover.SetupVelocity();
-            this.StartCoroutine(this.TurnInvicibleMode());
         }
 
         private void Awake()
@@ -47,11 +46,14 @@ namespace RacingSimulation.Player
             this.playerMover.Rotate(this.playerInput.GetHorizontalAxis());
         }
 
-        private IEnumerator TurnInvicibleMode()
+        public void StartInvincibleMode() => this.StartCoroutine(this.TurnInvincibleMode());
+        public void StopInvincibleMode() => this.StopCoroutine(this.TurnInvincibleMode());
+
+        private IEnumerator TurnInvincibleMode()
         {
-            this.invicibleMode = true;
-            yield return new WaitForSeconds(this.invicibleTime);
-            this.invicibleMode = false;
+            this.invincibleMode = true;
+            yield return new WaitForSeconds(this.invincibleTime);
+            this.invincibleMode = false;
         }
 
         private void Accelarate()

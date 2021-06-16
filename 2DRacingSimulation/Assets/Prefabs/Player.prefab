@@ -263,7 +263,9 @@ MonoBehaviour:
     accelerateKeyCode: 304
     brakeKeyCode: 306
   playerMover:
-    speedForce: 2
-    torqueForce: -500
+    speedForce: 3
+    torqueForce: -700
     driftFactorSticky: 0.9
     driftFactorSlipy: 1
+  invincibleTime: 1.5
+  invincibleMode: 1
