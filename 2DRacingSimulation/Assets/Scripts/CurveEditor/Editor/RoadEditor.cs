@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using RacingSimulation.ThirdParty;
 
 namespace RacingSimulation.CurveEditor
 {
@@ -7,7 +8,7 @@ namespace RacingSimulation.CurveEditor
     public class RoadEditor : Editor
     {
         private RoadCreator creator;
-        private int roadIndex = 1;
+        private int roadIndex = 0;
 
         private void OnEnable()
         {
@@ -26,29 +27,31 @@ namespace RacingSimulation.CurveEditor
         {
             base.OnInspectorGUI();
          
-            if (GUILayout.Button("Save new road"))
+            if (GUILayout.Button("Generate new snapshot"))
             {
                 string name = $"Road_{this.roadIndex++}";
-                string localPath = this.SetLocalPath(name);
-                CreateAndSavePrefab(name, localPath);
+                string texturePath = this.SetLocalPath(name);
+
+                var transparencyCapture = this.GenerateRoad(name);
+                transparencyCapture.StartCoroutine(transparencyCapture.Capture(texturePath)); 
             }
         }
 
         private string SetLocalPath(string name)
         {
-            string localPath = $"Assets/Prefabs/GeneratedRoads/{name}.prefab";
+            string localPath = $"Assets/Textures/Snapshots/{name}.png";
             localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
             return localPath;
         }
 
-        private void CreateAndSavePrefab(string name, string localPath)
+        private TransparencyCaptureToFile GenerateRoad(string prefabName)
         {
-            GameObject newRoad = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider));
-            Mesh copiedMesh = this.creator.CloneMesh();
+            GameObject newRoad = new GameObject(prefabName, typeof(MeshFilter), typeof(MeshRenderer), typeof(TransparencyCaptureToFile));
 
-            newRoad.GetComponent<MeshFilter>().sharedMesh = copiedMesh;
-            newRoad.GetComponent<MeshRenderer>().sharedMaterial = this.creator.GetComponent<MeshRenderer>().sharedMaterial;
-            newRoad.GetComponent<MeshCollider>().sharedMesh = copiedMesh;
+            newRoad.GetComponent<MeshFilter>().mesh = this.creator.CloneRoadMesh();          
+            newRoad.GetComponent<MeshRenderer>().material = this.creator.GetComponent<MeshRenderer>().sharedMaterial;
+
+            return newRoad.GetComponent<TransparencyCaptureToFile>();
         }
     }
 }

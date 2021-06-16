@@ -14,18 +14,18 @@ namespace RacingSimulation.CurveEditor
         [SerializeField] private float tiling = 1f;       
         [SerializeField] private bool autoUpdate;
 
-        private Mesh CurrentMesh => this.GetComponent<MeshFilter>().sharedMesh;
 
         [ExecuteInEditMode]
-        public Mesh CloneMesh()
+        public Mesh CloneRoadMesh()
         {
+            Mesh currentMesh = this.GetComponent<MeshFilter>().sharedMesh;
             Mesh clonedMesh = new Mesh();
 
             clonedMesh.name = "clone";
-            clonedMesh.vertices = this.CurrentMesh.vertices;
-            clonedMesh.triangles = this.CurrentMesh.triangles;
-            clonedMesh.normals = this.CurrentMesh.normals;
-            clonedMesh.uv = this.CurrentMesh.uv;
+            clonedMesh.vertices = currentMesh.vertices;
+            clonedMesh.triangles = currentMesh.triangles;
+            clonedMesh.normals = currentMesh.normals;
+            clonedMesh.uv = currentMesh.uv;
 
             return clonedMesh;
         }
