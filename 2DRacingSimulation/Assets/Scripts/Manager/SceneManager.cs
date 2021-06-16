@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using TMPro;
 using System;
+using System.Linq;
+using RacingSimulation.Road;
+using System.Collections.Generic;
 
 namespace RacingSimulation.Manager
 {
@@ -24,18 +27,18 @@ namespace RacingSimulation.Manager
             }
         }
 
+        public List<ICheckPoint> CheckPoints { get => this.checkPoints; set => this.checkPoints = value; }
         public bool EndLoop { get => this.endLoop; set => this.endLoop = value; }
         public int LoopCounter 
         { 
             get => this.loopCounter;
             set
             {
-                if (this.loopCounter == value) return;
+                if (!this.endLoop) return;
                 this.loopCounter = value;
                 this.OnLoopCounterUpdate?.Invoke(this, EventArgs.Empty);
             }
         }
-
 
         [SerializeField] private Transform startTransform;
         [SerializeField] private GameObject playerPrefab;
@@ -46,10 +49,20 @@ namespace RacingSimulation.Manager
         [SerializeField] private Timer timer;
 
         private static SceneManager instance;
+        
+        private List<ICheckPoint> checkPoints = new List<ICheckPoint>();
         private bool endLoop = false;
-        private int loopCounter = 0;
+        private int loopCounter = 1;
+        
+        public bool IfVisitedAllCheckPoints() => !this.checkPoints.Any(x => !x.Visited);
 
-        private GameObject currentPlayer;
+        public void ResetCheckPoints()
+        {
+            foreach (var checkPoint in this.checkPoints)
+            {
+                checkPoint.Visited = false;
+            }
+        }
 
         public void StartTimerLoop() => this.StartCoroutine(this.timer.LoopTimer());
         public void EndTimerLoop() => this.StopCoroutine(this.timer.LoopTimer());
@@ -69,7 +82,7 @@ namespace RacingSimulation.Manager
 
         private void Start()
         {
-            this.currentPlayer = Instantiate(this.playerPrefab, this.startTransform.position, this.startTransform.rotation);
+            Instantiate(this.playerPrefab, this.startTransform.position, this.startTransform.rotation);
             this.SetupTimeText(this.currentTimeText, this.timer.CurrentTime);
 
             this.SetupEvent();

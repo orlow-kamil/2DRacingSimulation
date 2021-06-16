@@ -9,13 +9,11 @@ namespace RacingSimulation.Road
     [RequireComponent(typeof(Collider2D))]
     public class RoadBorder : MonoBehaviour
     {
-        private List<ICheckPoint> checkpoints = new List<ICheckPoint>();
-
         private void Awake()
         {
-            this.checkpoints = FindObjectsOfType<MonoBehaviour>().OfType<ICheckPoint>().ToList();
+            SceneManager.Instance.CheckPoints = FindObjectsOfType<MonoBehaviour>().OfType<ICheckPoint>().ToList();
 
-            if (!this.checkpoints.Any())
+            if (!SceneManager.Instance.CheckPoints.Any())
                 throw new System.NullReferenceException($"Checkpoints not found.");
         }
 
@@ -23,32 +21,17 @@ namespace RacingSimulation.Road
         {
             if (collision.gameObject.TryGetComponent(out PlayerController player))
             {
-                Debug.Log($"{player.name} is out of road.");
-                Transform checkPoint = ChooseClosestCheckPoint(player.transform);
-                player.transform.position = checkPoint.position;
+                Transform checkPoint = ChooseClosestCheckPoint(player);
+                player.transform.SetPositionAndRotation(checkPoint.position, checkPoint.rotation);
                 player.RestartPlayer();
                 SceneManager.Instance.AddPenaltyTime();
             }
         }
 
-        private Transform ChooseClosestCheckPoint(Transform player)
+        private Transform ChooseClosestCheckPoint(PlayerController player)
         {
-            var distances = this.GetCalculatedDistances(player);
-            float minDistance = distances.Min();
-            return this.checkpoints.Where(x => this.GetCalculateDistance(x, player) == minDistance).First().Transform;
+            int currentIndex = player.CurrentCheckPointIndex;
+            return SceneManager.Instance.CheckPoints.Where(x => x.Index == currentIndex).First().Transform;
         }
-
-        private List<float> GetCalculatedDistances(Transform player)
-        {
-            var distances = new List<float>();
-            foreach (var checkPoint in this.checkpoints)
-            {
-                float distance = this.GetCalculateDistance(checkPoint, player);
-                distances.Add(distance);
-            }
-            return distances.ToList();
-        }
-
-        private float GetCalculateDistance(ICheckPoint checkPoint, Transform player) => Vector2.Distance(checkPoint.Transform.position, player.position);
     }
 }
