@@ -8,10 +8,13 @@ namespace RacingSimulation.Road
     {
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.gameObject.TryGetComponent(out PlayerController _) && SceneManager.Instance.LoopCounter != 0)
+            if (collision.gameObject.TryGetComponent(out PlayerController _))
             {
-                SceneManager.Instance.EndLoop = true;
-                SceneManager.Instance.UpdateBestTime();
+                if (SceneManager.Instance.IfVisitedAllCheckPoints())
+                {
+                    SceneManager.Instance.UpdateBestTime();
+                    SceneManager.Instance.EndLoop = true;
+                }
             }
         }
 
@@ -19,8 +22,8 @@ namespace RacingSimulation.Road
         {
             if (collision.gameObject.TryGetComponent(out PlayerController _))
             {
-                SceneManager.Instance.EndLoop = false;
                 SceneManager.Instance.StartTimerLoop();
+                SceneManager.Instance.ResetCheckPoints();
             }
         }
     }

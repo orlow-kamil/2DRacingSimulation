@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 
 namespace RacingSimulation.ThirdParty
@@ -14,6 +15,7 @@ namespace RacingSimulation.ThirdParty
             TransparencyCapture.CaptureScreenshot(path);
 
             yield return new WaitForEndOfFrame();
+            AssetDatabase.Refresh();
             DestroyImmediate(this.gameObject);
         }
     }

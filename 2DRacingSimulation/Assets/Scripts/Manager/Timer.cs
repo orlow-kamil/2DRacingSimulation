@@ -30,13 +30,14 @@ namespace RacingSimulation.Manager
 
         public IEnumerator LoopTimer()
         {
-            ++SceneManager.Instance.LoopCounter;
+            SceneManager.Instance.EndLoop = false;
             this.currentTime = 0f;
             while (!SceneManager.Instance.EndLoop)
             {
                 yield return this.OneTik();
                 this.OnCurrentTimeUpdate?.Invoke(this, EventArgs.Empty);
             }
+            ++SceneManager.Instance.LoopCounter;
         }
 
         private IEnumerator OneTik()
